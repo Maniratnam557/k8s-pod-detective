@@ -1,0 +1,97 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Go workspace file
+go.work
+
+# Build output
+pod-detective
+pod-detective-*
+/bin/
+/build/
+
+# Documentation and guides (txt and html as requested)
+*.txt
+*.html
+*.md
+!README.md
+!CONTRIBUTING.md
+!LICENSE.md
+
+# Dependency directories
+vendor/
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.iml
+
+# Debug files
+debug
+*.log
+__debug_bin
+
+# Delve debugger
+__debug_bin*
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*~
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Test coverage
+coverage.txt
+coverage.html
+*.cover
+
+# Kubeconfig files (security)
+*.kubeconfig
+kubeconfig
+config.yaml
+
+# Generated files
+*.pb.go
+*_generated.go
+
+# Docker
+.dockerignore
+
+# Kubernetes
+*.yaml.backup
+kustomization.yaml
+
+# Personal notes and debugging
+notes.txt
+debug*.txt
+test*.txt
+scratch/

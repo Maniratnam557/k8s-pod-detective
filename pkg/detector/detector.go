@@ -15,12 +15,19 @@ import (
 type PodDetector struct {
 	clientset *kubernetes.Clientset
 	seen      map[string]bool
+	options   Options
 }
 
-func New(clientset *kubernetes.Clientset) *PodDetector {
+type Options struct {
+	PodName       string
+	LabelSelector string
+}
+
+func New(clientset *kubernetes.Clientset, opts Options) *PodDetector {
 	return &PodDetector{
 		clientset: clientset,
 		seen:      make(map[string]bool),
+		options:   opts,
 	}
 }
 
@@ -30,12 +37,23 @@ func (d *PodDetector) WatchPods(namespace string) error {
 
 	for {
 
+		listOptions := metav1.ListOptions{}
+
+		if d.options.LabelSelector != "" {
+			listOptions.LabelSelector = d.options.LabelSelector
+		}
+
+		if d.options.PodName != "" {
+			listOptions.FieldSelector = fmt.Sprintf("metadata.name=%s", d.options.PodName)
+		}
+
 		fmt.Printf("[DEBUG] Querying namespace='%s'\n", namespace)
 
 		pods, err := d.clientset.CoreV1().Pods(namespace).List(
 			context.TODO(),
-			metav1.ListOptions{},
+			listOptions,
 		)
+
 		if err != nil {
 			return fmt.Errorf("failed to list pods: %w", err)
 		}

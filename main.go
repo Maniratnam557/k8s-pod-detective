@@ -30,6 +30,10 @@ func main() {
 	namespace := flag.String("namespace", "default",
 		"Kubernetes namespace to monitor")
 
+	podName := flag.String("pod", "", "(optional) specific pod name to monitor (e.g., 'nginx-abc123')")
+
+	labelSelector := flag.String("labels", "", "(optional) label selector (e.g., 'app=nginx,tier=frontend')")
+
 	flag.Parse()
 
 	// ===== BUILD CONFIG (WORKS BOTH IN-CLUSTER AND OUT-OF-CLUSTER) =====
@@ -54,8 +58,18 @@ func main() {
 	// Print banner
 	printBanner()
 
+	if *podName != "" && *labelSelector != "" {
+		fmt.Fprintf(os.Stderr, "Error: Cannot use both --pod and --labels together\n")
+		os.Exit(1)
+	}
+
+	opts := detector.Options{
+		PodName:       *podName,
+		LabelSelector: *labelSelector,
+	}
+
 	// Start detector
-	podDetector := detector.New(clientset)
+	podDetector := detector.New(clientset, opts)
 	if err := podDetector.WatchPods(*namespace); err != nil {
 		fmt.Fprintf(os.Stderr, "Error watching pods: %v\n", err)
 		os.Exit(1)
